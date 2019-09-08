@@ -1,6 +1,7 @@
 from Robot import Robot
 from time import sleep
 from math import *
+from AngleConverter import *
 
 class Calibrate:
 
@@ -26,8 +27,9 @@ class Calibrate:
         dy = self.stopPosition.get('Y') - self.startPosition.get('Y')
         angle = atan2(dy, dx)
         distance = sqrt( pow(dx,2) + pow(dy,2) )
+        converter = AngleConverter()
         print(angle)
-        print(degrees(angle))
+        print(converter.convertToDegree(angle))
         print(distance)
 
 
