@@ -3,6 +3,7 @@ from Path import *
 from Calibrate import *
 from AngleConverter import *
 from PathHandler import *
+from Navigator import *
 
 # load a path file
 p = Path("Path-around-table.json")
@@ -15,18 +16,11 @@ print("First point = " + str(path[0]['X']) + ", " + str(path[0]['Y']))
 robot = Robot()
 converter = AngleConverter()
 pathHandler = PathHandler()
-# calibration = Calibrate(robot)
-# calibration.calibrate()
-# print(converter.convertToDegree(robot.getHeading()))
-# robot.setMotion(0,0.104)
-# sleep(60)
-# robot.setMotion(0,0)
-# print(converter.convertToDegree(robot.getHeading()))
-# dropOut = False
+navigator = Navigator()
 
 #### Intialize variables
 position = {}
-speed = 0.5
+speed = 0.4
 heading = 0
 nextPoint = 0
 dropOut = 0
@@ -40,16 +34,14 @@ while ( dropOut < 100 ):
     
     ### get next point
     nextPoint = pathHandler.getNextPathPoint( position, path, nextPoint, lookAheadDistance)
-
-    ### {X, Y} getNextPath (pathList, startEntry, lookaheadDistance)
-        ### current position
-        ### loop through path entries
-            ### calculate distance
+    print(nextPoint)
 
     ### find direction to path
-        ### angle to next point
-        ### which direction to turn
-        ### determine actual angle 
+    directionToPoint = navigator.getDirection( position, path, nextPoint )    
+    turnRate = navigator.getTurnRate( heading, directionToPoint )
 
     ### set motion
+    robot.setMotion(speed, turnRate )
+    time.sleep(0.5)
+    robot.setMotion(0,0 )
 
