@@ -1,10 +1,11 @@
-from Robot import *
-from Path import *
-from Calibrate import *
-from AngleConverter import *
-from PathHandler import *
-from Navigator import *
-from Goal import *
+from Robot import Robot
+from time import sleep
+from Path import Path
+from Calibrate import Calibrate
+from AngleConverter import AngleConverter
+from PathHandler import PathHandler
+from Navigator import Navigator
+from Goal import Goal
 
 # load a path file
 p = Path("Path-around-table.json")
@@ -44,7 +45,7 @@ while ( goal.notGoal( position, nextPoint, path ) ):
 
     ### set motion
     robot.setMotion(speed, turnRate )
-    time.sleep(0.5)
+    sleep(0.5)
     robot.setMotion(0,0 )
 
 

@@ -1,5 +1,5 @@
 from math import atan2
-from AngleConverter import * 
+from AngleConverter import AngleConverter
 
 class Navigator:
     

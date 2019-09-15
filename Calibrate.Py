@@ -1,7 +1,7 @@
 from Robot import Robot
 from time import sleep
-from math import *
-from AngleConverter import *
+from math import atan2, sqrt, pow
+from AngleConverter import AngleConverter
 
 class Calibrate:
 
