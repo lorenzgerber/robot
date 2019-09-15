@@ -25,9 +25,6 @@ class PathHandler:
         return ( False )
 
 
-
-
-
     def calculateDistance ( self, xHome, yHome, xAway, yAway ):
             distance = sqrt(pow(xAway - xHome, 2) + pow(yAway - yHome, 2))
             return ( distance )
