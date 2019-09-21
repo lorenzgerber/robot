@@ -26,11 +26,11 @@ goal = Goal()
 #### Intialize variables
 robot.setMotion(0, 0)
 position = robot.getPosition()
-speed = 0.4
+speed = 0.5
 heading = 0
 nextPoint = 0
 dropOut = 0
-lookAheadDistance = 0.6
+lookAheadDistance = 0.8
 damper = [0]
 
 while ( goal.notGoal( position, nextPoint, path ) ):
@@ -47,7 +47,7 @@ while ( goal.notGoal( position, nextPoint, path ) ):
     turnDirection = navigator.getTurnDirection( heading, directionToPoint )
     turnRate = calculator.getTurnRate( directionToPoint, turnDirection )
     damper.append(turnRate)
-    damper = damper[-10:]
+    damper = damper[-5:]
 
     if(sum(damper)!= 0):
         turnRate = sum(damper) / len(damper)
@@ -58,3 +58,4 @@ while ( goal.notGoal( position, nextPoint, path ) ):
     sleep(0.1)
 
 robot.setMotion( 0,0 )
+sleep(1)
