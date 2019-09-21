@@ -2,13 +2,14 @@ from Robot import Robot
 from time import sleep
 from Path import Path
 from Calibrate import Calibrate
+from Calculator import Calculator
 from AngleConverter import AngleConverter
 from PathHandler import PathHandler
 from Navigator import Navigator
 from Goal import Goal
 
 # load a path file
-p = Path("Path-around-table.json")
+p = Path("Path-around-table-and-back.json")
 path = p.getPath()
 
 print("Path length = " + str(len(path)))
@@ -19,15 +20,17 @@ robot = Robot()
 converter = AngleConverter()
 pathHandler = PathHandler()
 navigator = Navigator()
+calculator = Calculator()
 goal = Goal()
 
 #### Intialize variables
 position = robot.getPosition()
-speed = 0.3
+speed = 0.4
 heading = 0
 nextPoint = 0
 dropOut = 0
-lookAheadDistance = 1
+lookAheadDistance = 0.6
+damper = [0]
 
 while ( goal.notGoal( position, nextPoint, path ) ):
 
@@ -37,17 +40,20 @@ while ( goal.notGoal( position, nextPoint, path ) ):
     
     ### get next point
     nextPoint = pathHandler.getNextPathPoint( position, path, nextPoint, lookAheadDistance)
-    print(nextPoint)
 
     ### find direction to path
     directionToPoint = navigator.getDirection( position, path, nextPoint )    
-    turnRate = navigator.getTurnRate( heading, directionToPoint )
+    turnDirection = navigator.getTurnDirection( heading, directionToPoint )
+    turnRate = calculator.getTurnRate( directionToPoint, turnDirection )
+    damper.append(turnRate)
+    damper = damper[-10:]
+
+    if(sum(damper)!= 0):
+        turnRate = sum(damper) / len(damper)
+
 
     ### set motion
     robot.setMotion(speed, turnRate )
-    sleep(0.5)
-    robot.setMotion(0,0 )
+    sleep(0.1)
 
-
-print('Geeeeeehaaaaaaa')
-
+robot.setMotion( 0,0 )

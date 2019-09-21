@@ -16,9 +16,9 @@ class Navigator:
 
         return ( angle )
 
-    def getTurnRate (self, heading, directionToPoint ):
+    def getTurnDirection (self, heading, directionToPoint ):
 
-        turnRate = 0.4
+        turnRate = 1
 
         metric = (heading - directionToPoint) % 360
         if ( metric >= 180.0 ):
