@@ -24,6 +24,7 @@ calculator = Calculator()
 goal = Goal()
 
 #### Intialize variables
+robot.setMotion(0, 0)
 position = robot.getPosition()
 speed = 0.4
 heading = 0
