@@ -1,61 +1,54 @@
 from Robot import Robot
 from time import sleep
 from Path import Path
-from Calibrate import Calibrate
-from Calculator import Calculator
-from AngleConverter import AngleConverter
 from PathHandler import PathHandler
 from Navigator import Navigator
-from Goal import Goal
 
-# load a path file
+# Settings
+maxSpeed = 0.5
+lookAheadDistance = 0.7
+maxTurnRate = 1.2
+damperLength = 7
+
+#### Intialize 
+robot = Robot()
 p = Path("Path-around-table-and-back.json")
 path = p.getPath()
-
-print("Path length = " + str(len(path)))
-print("First point = " + str(path[0]['X']) + ", " + str(path[0]['Y']))
-
-# make a robot to move around
-robot = Robot()
-converter = AngleConverter()
 pathHandler = PathHandler()
-navigator = Navigator()
-calculator = Calculator()
-goal = Goal()
-
-#### Intialize variables
+navigator = Navigator( maxSpeed, maxTurnRate, damperLength )
 robot.setMotion(0, 0)
 position = robot.getPosition()
-speed = 0.5
 heading = 0
 nextPoint = 0
-dropOut = 0
-lookAheadDistance = 0.8
-damper = [0]
 
-while ( goal.notGoal( position, nextPoint, path ) ):
+while ( navigator.notGoal( position, nextPoint, path ) ):
 
     ### get current status (position, heading)
     position = robot.getPosition()
-    heading = converter.convertToDegree(robot.getHeading())
+    heading = navigator.convertToDegree(robot.getHeading())
     
     ### get next point
     nextPoint = pathHandler.getNextPathPoint( position, path, nextPoint, lookAheadDistance)
 
     ### find direction to path
     directionToPoint = navigator.getDirection( position, path, nextPoint )    
+    
+    ### get turn direction +/- maximum turn rate
     turnDirection = navigator.getTurnDirection( heading, directionToPoint )
-    turnRate = calculator.getTurnRate( directionToPoint, turnDirection )
-    damper.append(turnRate)
-    damper = damper[-5:]
+    
+    ### determine dynamic turn rate based on interecpt angle
+    turnRate = navigator.getTurnRate( directionToPoint, turnDirection )
+    
+    ### apply a dampler on the turn rate output
+    turnRate = navigator.dampen( turnRate)
 
-    if(sum(damper)!= 0):
-        turnRate = sum(damper) / len(damper)
-
+    ### dynamic speed adjustment according turnRate (currently not in use)
+    #speed = navigator.adjustSpeed( turnRate )
+    speed = maxSpeed
 
     ### set motion
     robot.setMotion(speed, turnRate )
-    sleep(0.1)
+    sleep(0.05)
 
 robot.setMotion( 0,0 )
 sleep(1)
