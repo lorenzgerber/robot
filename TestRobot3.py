@@ -6,10 +6,10 @@ from Navigator import Navigator
 
 # Settings
 maxSpeed = 0.5
-lookAheadDistance = 0.7
-lookAheadSwitchDistance = 0.2
+lookAheadDistance = 0.8
+lookAheadSwitchDistance = 0.5
 maxTurnRate = 1.2
-damperLength = 7
+damperLength = 5
 
 #### Intialize 
 robot = Robot()
@@ -49,7 +49,7 @@ while ( navigator.notGoal( position, nextPoint, path ) ):
 
     ### set motion
     robot.setMotion(speed, turnRate )
-    sleep(0.05)
+    sleep(0.1)
 
 robot.setMotion( 0,0 )
 sleep(1)
