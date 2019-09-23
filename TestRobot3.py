@@ -7,6 +7,7 @@ from Navigator import Navigator
 # Settings
 maxSpeed = 0.5
 lookAheadDistance = 0.7
+lookAheadSwitchDistance = 0.2
 maxTurnRate = 1.2
 damperLength = 7
 
@@ -28,7 +29,7 @@ while ( navigator.notGoal( position, nextPoint, path ) ):
     heading = navigator.convertToDegree(robot.getHeading())
     
     ### get next point
-    nextPoint = pathHandler.getNextPathPoint( position, path, nextPoint, lookAheadDistance)
+    nextPoint = pathHandler.getNextPathPoint( position, path, nextPoint, lookAheadDistance, lookAheadSwitchDistance)
 
     ### find direction to path
     directionToPoint = navigator.getDirection( position, path, nextPoint )    
